@@ -7,4 +7,13 @@ FROM debian:stable-slim
 WORKDIR /app
 COPY --from=build /src/equilibrium .
 ENV COOKIE_SECURE=1 DATA_DIR=/app/data
+CMD ["./equilibrium"]FROM gcc:13 AS build
+WORKDIR /src
+COPY equilibrium.c .
+RUN gcc -O2 -o equilibrium equilibrium.c
+
+FROM debian:stable-slim
+WORKDIR /app
+COPY --from=build /src/equilibrium .
+ENV COOKIE_SECURE=1 DATA_DIR=/app/data
 CMD ["./equilibrium"]
